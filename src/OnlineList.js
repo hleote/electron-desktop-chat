@@ -13,7 +13,7 @@ class OnlineList extends Component {
       <ListView className="online-list">
         <ListViewSection>
           {this.props.users &&
-            this.props.users.map((user, index) => {
+            this.props.users.map((user) => {
               if (user.id === this.props.currentUser.id) {
                 return this.renderItem(
                   `${user.name} (You)`,

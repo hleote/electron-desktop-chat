@@ -3,7 +3,7 @@ import { Button, TextInput } from 'react-desktop/macOs'
 
 class SendMessageForm extends Component {
   state = {
-    text: ''
+    text: '',
   }
 
   onSubmit = e => {
@@ -14,14 +14,14 @@ class SendMessageForm extends Component {
 
   onChange = e => {
     this.setState({ text: e.target.value })
-    if (this.props.onChange) {
-      this.props.onChange()
-    }
+    this.props.currentUser.isTypingIn({ roomId: 9818789 })
+    .then(() => {})
+    .catch(err => { console.log(`Error sending typing indicator: ${err}`) })
   }
-
   render() {
     return (
       <div className="send-message-form-container">
+        <span>{this.props.typingMessage}</span>
         <form onSubmit={this.onSubmit} className="send-message-form">
           <TextInput
             type="text"

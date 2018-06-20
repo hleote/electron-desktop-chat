@@ -8,7 +8,8 @@ class Chat extends Component {
   state = {
     currentUser: {},
     currentRoom: {},
-    messages: []
+    messages: [],
+    typingMessage: ''
   }
 
   componentDidMount() {
@@ -23,6 +24,7 @@ class Chat extends Component {
     chatkit
       .connect()
       .then(currentUser => {
+          console.log("currentUser ", currentUser)
         this.setState({ currentUser })
         console.log('Bleep bloop 🤖 You are connected to Chatkit')
         return currentUser.subscribeToRoom({
@@ -34,7 +36,13 @@ class Chat extends Component {
                 },
                 onUserCameOnline: () => this.forceUpdate(),
                 onUserWentOffline: () => this.forceUpdate(),
-                onUserJoined: () => this.forceUpdate()
+                onUserJoined: () => this.forceUpdate(),
+                onUserStartedTyping: user => {
+                    this.setState({ typingMessage: `User ${user.name} started typing` })
+                  },
+                onUserStoppedTyping: user => {
+                    this.setState({ typingMessage: '' })
+                }
             }
         }).then(currentRoom => {
             this.setState({ currentRoom })
@@ -55,7 +63,7 @@ class Chat extends Component {
         </div>
         <div className="chat">
             <MessageList currentUserName={this.state.currentUser.name} messages={this.state.messages} />
-            <SendMessageForm onSend={this.onSend} />
+            <SendMessageForm typingMessage={this.state.typingMessage} currentUser={this.state.currentUser} onSend={this.onSend} />
         </div>
       </div>
     )
